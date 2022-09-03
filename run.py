@@ -8,7 +8,11 @@ class Board:
         self.num_ships = num_ships
         self.name = name
         self.guesses = []
-        self.ships = []
+        self.ships = [] 
+    
+    def print(self):
+        for row in self.board:
+            print(" ".join(row))
 
     
 
@@ -18,7 +22,9 @@ class Board:
 def play_game(computer_board, player_board):
 
     print(f"{player_board.name}'s Board:")
+    player_board.print()
     print("Computer's Board:")
+    computer_board.print()
     x = input("Guess a row:")
     y = input("Guess a column:")
 
