@@ -1,6 +1,6 @@
 from random import randint
 
-# class Board:
+class Board:
     
 
 
@@ -8,6 +8,9 @@ from random import randint
 
 
 def new_game():
+    """
+    Starts a new game. Sets the size of the board and the number of ships.
+    """
 
     print("-" * 35) 
     print("   Welcome to a Battleships Game\n")
