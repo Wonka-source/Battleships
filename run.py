@@ -1,6 +1,10 @@
 from random import randint
 
 class Board:
+    """
+    Main board class. Sets board size, the number of ships,
+    the name.
+    """
 
     def __init__(self, size, num_ships, name):
         self.size = size
