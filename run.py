@@ -13,7 +13,17 @@ class Board:
     
 
 
-# def setup():
+
+
+def play_game(computer_board, player_board):
+
+    print(f"{player_board.name}'s Board:")
+    print("Computer's Board:")
+    x = input("Guess a row:")
+    y = input("Guess a column:")
+
+
+
 
 
 def new_game():
@@ -39,7 +49,9 @@ def new_game():
     print(f" Board size:{size}. Numb of Ships:{num_ships}\n")    
     print(" Top left corner is row: 0, col: 0")
     print("-" * 35) 
+    computer_board = Board(int(size), int(num_ships), "Computer")
+    player_board = Board(int(size), int(num_ships), player_name)
 
-
+    play_game(computer_board, player_board)
     
 new_game()
