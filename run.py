@@ -3,11 +3,15 @@
 # Write your code to expect a terminal of 80 characters wide and 24 rows high
 from random import randint
 
-# class Board:
-#     pass
+class Board:
+    
+
+
+def setup():
 
 
 def play_game():
+
     print("-" * 35) 
     print("Welcome to a Battleships Game")
     print("Board size: 5. Number of ships: 4")
