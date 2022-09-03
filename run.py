@@ -1,25 +1,33 @@
-# Your code goes here.
-# You can delete these comments, but do not change the name of this file
-# Write your code to expect a terminal of 80 characters wide and 24 rows high
 from random import randint
 
-class Board:
+# class Board:
     
 
 
-def setup():
+# def setup():
 
 
-def play_game():
+def new_game():
 
     print("-" * 35) 
-    print("Welcome to a Battleships Game")
-    print("Board size: 5. Number of ships: 4")
-    print("Top left corner is row: 0, col: 0")
+    print("   Welcome to a Battleships Game\n")
+    print("-" * 35)
+    print("       Enter a Board Size!\n")
+    print(" Minimum Size= 5  Maximum Size= 10 \n")    
+    size = input("Board Size:\n")
+    print("-" * 35)
+    print("       Enter Num of Ships!\n")
+    print(" Minimum Num= 4  Maximum Num= 14 \n")
+    num_ships = input("Num of Ships:\n")
+    print("-" * 35)
+    print("        Enter Your Name!\n")
+    player_name = input("Your Name:\n")
+    print("-" * 35)
+    print(f" Hello {player_name}!\n")    
+    print(f" Board size:{size}. Numb of Ships:{num_ships}\n")    
+    print(" Top left corner is row: 0, col: 0")
     print("-" * 35) 
 
-    player_name = input("Please enter your name: ")
-    print(player_name)
 
     
-play_game()
+new_game()
