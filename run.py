@@ -20,8 +20,7 @@ class Board:
             print(" ".join(row))
     
     def guess(self, x, y):
-        self.guesses.append((x, y))
-        print(self.guesses)
+        self.guesses.append((x, y))        
 
         if(x, y) in self.ships:
             self.board[x][y] = "*"
@@ -61,12 +60,13 @@ def random_point(size):
 
 
 def play_game(computer_board, player_board):
-
+    print("\n Top left corner is row: 0, col: 0\n")
     print(f"{player_board.name}'s Board:")
     player_board.print()
     print("Computer's Board:")
     computer_board.print()
-    x = input("Guess a row:")
+    print(f"\n{computer_board.guesses}")
+    x = input("\nGuess a row:")
     y = input("Guess a column:")
     computer_board.guess(int(x), int(y))
     play_game(computer_board, player_board)
