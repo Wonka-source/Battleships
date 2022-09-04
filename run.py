@@ -19,6 +19,17 @@ class Board:
         for row in self.board:
             print(" ".join(row))
     
+    def guess(self, x, y):
+        self.guesses.append((x, y))
+        print(self.guesses)
+
+        if(x, y) in self.ships:
+            self.board[x][y] = "*"
+            return "Hit"
+        else:
+            self.board[x][y] = "X"
+            return "Miss"
+
     def populate_board(self):
         """
         populates ships to the computer's and the player's
@@ -57,6 +68,7 @@ def play_game(computer_board, player_board):
     computer_board.print()
     x = input("Guess a row:")
     y = input("Guess a column:")
+    computer_board.guess(int(x), int(y))
     play_game(computer_board, player_board)
 
 
