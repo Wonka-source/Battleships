@@ -1,3 +1,7 @@
+# A Battleship Game
+
+
+
 # Deployment
 
 - Add newline (/n) to all input methods
@@ -20,7 +24,8 @@
 - Then select Github and confirm connect to Github
 - Search for the repository name
 - Then click connect
-- Select either manual or automatic deploy 
+- Select either manual or automatic deploy
+- Click view to view  
 
 **Test Label**  
 

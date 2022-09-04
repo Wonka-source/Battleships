@@ -52,7 +52,8 @@ class Board:
             # print("battle col", battleship_col)
             # print("board ships", self.ships)
             # print("#" * 25)
-    
+
+
 def random_point(size):
     """
     Helper function to return a random integer between 0 and size
@@ -60,18 +61,39 @@ def random_point(size):
     return randint(0, size -1)
 
 
+def take_coord(row_column, size):
+    coord = input(f"\nGuess a {row_column}:")
+    while invalid_coord(coord, size):
+        print(f"Values must be between 0 and{size}")
+        coord = input(f"Please enter a {row_column}:\n")
+    return int(coord)
 
-def play_game(computer_board, player_board):
+def invalid_coord(coord, size):
+    if coord.isnumeric() and int(coord) > -1 and int(coord) < size:
+        return False
+    return True
+
+def already_guessed(x, y)
+
+    
+
+
+
+
+
+
+def play_game(computer_board, player_board, size):
     print("\n Top left corner is row: 0, col: 0\n")
     print(f"{player_board.name}'s Board:")
     player_board.print()
     print("Computer's Board:")
     computer_board.print()
     print(f"\n{computer_board.guesses}")
-    x = input("\nGuess a row:")
-    y = input("Guess a column:")
-    computer_board.guess(int(x), int(y))
-    play_game(computer_board, player_board)
+    x = take_coord("row", size)
+    y = take_coord("column", size)
+    already_guessed(int(x), int(y), computer_board)
+    # computer_board.guess(int(x), int(y))
+    play_game(computer_board, player_board, size)
 
 
 
@@ -106,7 +128,7 @@ def new_game():
     computer_board.populate_board()
     player_board.populate_board()
 
-    play_game(computer_board, player_board)
+    play_game(computer_board, player_board, int(size))
     
     
 new_game()
