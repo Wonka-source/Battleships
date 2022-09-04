@@ -3,23 +3,49 @@ from random import randint
 class Board:
     """
     Main board class. Sets board size, the number of ships,
-    the name.
+    the name and board type (computer or player).
     """
 
-    def __init__(self, size, num_ships, name):
+    def __init__(self, size, num_ships, name, type):
         self.size = size
         self.board = [["." for x in range(size)] for y in range(size)]
         self.num_ships = num_ships
         self.name = name
+        self.type = type
         self.guesses = []
         self.ships = [] 
     
     def print(self):
         for row in self.board:
             print(" ".join(row))
-
     
+    def populate_board(self):
+        """
+        populates ships to the computer's and the player's
+        board
+        """
+        num_of_ships_placed = 0
 
+        while self.num_ships > num_of_ships_placed:
+
+            battleship_row = random_point(self.size)
+            battleship_col = random_point(self.size)
+            if (battleship_row, battleship_col) not in self.ships:
+                self.ships.append((battleship_row, battleship_col))
+                num_of_ships_placed += 1
+            
+            print("num of ships", num_of_ships_placed)
+            print("board num of ships", self.num_ships)
+            print("battle row ", battleship_row)
+            print("battle col", battleship_col)
+            print("board ships", self.ships)
+            print("#" * 25)
+    
+def random_point(size):
+    """
+    Helper function to return a random integer between 0 and size
+    """
+    return randint(0, size -1)
 
 
 
@@ -31,6 +57,7 @@ def play_game(computer_board, player_board):
     computer_board.print()
     x = input("Guess a row:")
     y = input("Guess a column:")
+    play_game(computer_board, player_board)
 
 
 
@@ -59,9 +86,13 @@ def new_game():
     print(f" Board size:{size}. Numb of Ships:{num_ships}\n")    
     print(" Top left corner is row: 0, col: 0")
     print("-" * 35) 
-    computer_board = Board(int(size), int(num_ships), "Computer")
-    player_board = Board(int(size), int(num_ships), player_name)
+    computer_board = Board(int(size),int(num_ships), "Computer", type="computer")
+    player_board = Board(int(size), int(num_ships), player_name, type="player")
+
+    computer_board.populate_board()
+    player_board.populate_board()
 
     play_game(computer_board, player_board)
+    
     
 new_game()
