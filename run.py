@@ -43,13 +43,15 @@ class Board:
             if (battleship_row, battleship_col) not in self.ships:
                 self.ships.append((battleship_row, battleship_col))
                 num_of_ships_placed += 1
+                if self.type == "player":
+                    self.board[battleship_row][battleship_col] = "@"
             
-            print("num of ships", num_of_ships_placed)
-            print("board num of ships", self.num_ships)
-            print("battle row ", battleship_row)
-            print("battle col", battleship_col)
-            print("board ships", self.ships)
-            print("#" * 25)
+            # print("num of ships", num_of_ships_placed)
+            # print("board num of ships", self.num_ships)
+            # print("battle row ", battleship_row)
+            # print("battle col", battleship_col)
+            # print("board ships", self.ships)
+            # print("#" * 25)
     
 def random_point(size):
     """
