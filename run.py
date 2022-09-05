@@ -116,14 +116,14 @@ def invalid_guess(x, y, board):
         return True
     return False
 
-def take_guess(x, y, board, size):
-    # x = take_coord("row", size)
-    # y = take_coord("column", size)
+def take_guess(board):
+    x = take_coord("row", board.size)
+    y = take_coord("column", board.size)
     while invalid_guess(int(x), int(y), board):
         print("ALREADY GUESSED!")
-        x = take_coord("row", size)
-        y = take_coord("column", size)
-    return (x, y)
+        x = take_coord("row", board.size)
+        y = take_coord("column", board.size)
+    print(board.guess((x, y)))
 
 
 
@@ -139,10 +139,7 @@ def play_game(computer_board, player_board, size):
     print("\nComputer's Board:")
     computer_board.print()
     print(f"\n{player_board.guesses}")
-    x = take_coord("row", size)
-    y = take_coord("column", size)
-    a_valid_guess = take_guess(x, y, computer_board, size)
-    computer_board.guess(a_valid_guess)
+    take_guess(computer_board)
     play_game(computer_board, player_board, size)
     # print(computer_board.guesses, "computerboard guesses" )
 
