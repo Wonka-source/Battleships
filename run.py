@@ -18,7 +18,7 @@ class Board:
 
         if type == "player":
             self.remaining_computer_guesses = [(x, y) for x in range(size) for y in range(size)]
-            # print(self.remaining_computer_guesses)
+            print(self.remaining_computer_guesses)
     def print(self):
         for row in self.board:
             print(" ".join(row))
@@ -105,14 +105,6 @@ def invalid_coord(coord, size):
         return False
     return True
 
-# def valid_guess(x, y, board):
-#     coord = (x, y)    
-#     print(coord, "guessed")
-#     guesses = board.guesses
-#     # print(guesses, "gusses")
-#     if coord in guesses:
-#         return False
-#     return True
 
 def invalid_guess(x, y, board):
     if (x, y) in board.guesses:
@@ -128,8 +120,9 @@ def take_guess(board):
         y = take_coord("column", board.size)
     print(board.guess((x, y)))
 
-
-
+def random_computer_guess(board):
+    xy = board.remaining_computer_guesses.pop(random_point(len(board.remaining_computer_guesses)))
+    print(board.guess(xy))
 
 
 def play_game(computer_board, player_board, size):
@@ -143,6 +136,8 @@ def play_game(computer_board, player_board, size):
     computer_board.print()
     print(f"\n{player_board.guesses}")
     take_guess(computer_board)
+    random_computer_guess(player_board)
+    print(player_board.remaining_computer_guesses)
     play_game(computer_board, player_board, size)
     # print(computer_board.guesses, "computerboard guesses" )
 
