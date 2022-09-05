@@ -86,7 +86,7 @@ def take_ships(size):
     max_ships = int(size*size*.5)
     ships = input(f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n")
     while invalid_ships(ships, min_ships, max_ships):
-        ships = input(f"\nYou must enter a number {min_ships} and {max_ships}!\n\nSHIPS:")
+        ships = input(f"\nYou must enter a number {min_ships} and {max_ships}!\n\nSHIPS:\n")
     return int(ships)
 
 
@@ -120,17 +120,10 @@ def take_guess(x, y, board, size):
     # x = take_coord("row", size)
     # y = take_coord("column", size)
     while invalid_guess(int(x), int(y), board):
-        print("Already guessed please try again")
+        print("ALREADY GUESSED!")
         x = take_coord("row", size)
         y = take_coord("column", size)
     return (x, y)
-
-# def computer_guess()
-    
-
-
-    
-
 
 
 
@@ -145,19 +138,11 @@ def play_game(computer_board, player_board, size):
     player_board.print()
     print("\nComputer's Board:")
     computer_board.print()
-    print(f"\n{computer_board.guesses}")
+    print(f"\n{player_board.guesses}")
     x = take_coord("row", size)
     y = take_coord("column", size)
-    comp_guess_x = random_point(size)
-    comp_guess_y = random_point(size)
-    comp_guess_xy = take_guess(comp_guess_x, comp_guess_y, player_board, size)
-    player_board.guess(comp_guess_xy)
     a_valid_guess = take_guess(x, y, computer_board, size)
     computer_board.guess(a_valid_guess)
-
-    # if valid_guess(int(x), int(y), computer_board):
-    #     computer_board.guess(int(x), int(y))    
-    # print(computer_board.guesses, "computerboard guesses" )
     play_game(computer_board, player_board, size)
     # print(computer_board.guesses, "computerboard guesses" )
 
