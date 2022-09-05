@@ -1,5 +1,6 @@
 from random import randint
 
+
 class Board:
     """
     Main board class. Sets board size, the number of ships,
@@ -19,11 +20,15 @@ class Board:
         for row in self.board:
             print(" ".join(row))
     
-    def guess(self, x, y):
+    def guess(self, a_valid_guess):
+        x = a_valid_guess[0]
+        y = a_valid_guess[1]
+        # list.append(a_valid_guess)
         self.guesses.append((x, y))        
-
+        # print(self.guesses, "guess(self, a_valid_guess):")
+        # print("a_valid_guess", x, y)
         if(x, y) in self.ships:
-            self.board[x][y] = "*"
+            self.board[x][y]= "*"
             return "Hit"
         else:
             self.board[x][y] = "X"
@@ -64,7 +69,7 @@ def random_point(size):
 def take_coord(row_column, size):
     coord = input(f"\nGuess a {row_column}:")
     while invalid_coord(coord, size):
-        print(f"Values must be between 0 and{size}")
+        print(f"Values must be between 0 and {size - 1}")
         coord = input(f"Please enter a {row_column}:\n")
     return int(coord)
 
@@ -73,7 +78,31 @@ def invalid_coord(coord, size):
         return False
     return True
 
-def already_guessed(x, y)
+# def valid_guess(x, y, board):
+#     coord = (x, y)    
+#     print(coord, "guessed")
+#     guesses = board.guesses
+#     # print(guesses, "gusses")
+#     if coord in guesses:
+#         return False
+#     return True
+
+def invalid_guess(x, y, board):
+    if (x, y) in board.guesses:
+        return True
+    return False
+
+def take_guess(x, y, board, size):
+    # x = take_coord("row", size)
+    # y = take_coord("column", size)
+    while invalid_guess(int(x), int(y), board):
+        print("Already guessed please try again")
+        x = take_coord("row", size)
+        y = take_coord("column", size)
+    return (x, y)
+
+
+
 
     
 
@@ -83,6 +112,7 @@ def already_guessed(x, y)
 
 
 def play_game(computer_board, player_board, size):
+    print(computer_board.guesses, "computerboard guesses" )
     print("\n Top left corner is row: 0, col: 0\n")
     print(f"{player_board.name}'s Board:")
     player_board.print()
@@ -91,10 +121,14 @@ def play_game(computer_board, player_board, size):
     print(f"\n{computer_board.guesses}")
     x = take_coord("row", size)
     y = take_coord("column", size)
-    already_guessed(int(x), int(y), computer_board)
-    # computer_board.guess(int(x), int(y))
-    play_game(computer_board, player_board, size)
+    a_valid_guess = take_guess(x, y, computer_board, size)
+    computer_board.guess(a_valid_guess)
 
+    # if valid_guess(int(x), int(y), computer_board):
+    #     computer_board.guess(int(x), int(y))    
+    # print(computer_board.guesses, "computerboard guesses" )
+    play_game(computer_board, player_board, size)
+    # print(computer_board.guesses, "computerboard guesses" )
 
 
 
