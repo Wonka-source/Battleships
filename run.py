@@ -65,6 +65,30 @@ def random_point(size):
     """
     return randint(0, size -1)
 
+def invalid_board_size(size):
+    if size.isnumeric() and int(size) > 4 and int(size) < 11:
+        return False
+    return True
+
+def invalid_ships(ships, min_ships, max_ships):
+    if ships.isnumeric() and int(ships) >= min_ships and int(ships) <= max_ships:
+        return False
+    return True
+
+def take_size():
+    size = input(f"BOARD SIZE:\n")
+    while invalid_board_size(size):
+        size = input("\nYou must enter a number between 5 and 10!\nBOARD SIZE:\n")
+    return int(size)
+
+def take_ships(size):
+    min_ships = int(size*size*.2)
+    max_ships = int(size*size*.5)
+    ships = input(f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n")
+    while invalid_ships(ships, min_ships, max_ships):
+        ships = input(f"\nYou must enter a number {min_ships} and {max_ships}!\n\nSHIPS:")
+    return int(ships)
+
 
 def take_coord(row_column, size):
     coord = input(f"\nGuess a {row_column}:")
@@ -112,11 +136,13 @@ def take_guess(x, y, board, size):
 
 
 def play_game(computer_board, player_board, size):
-    print(computer_board.guesses, "computerboard guesses" )
+    # print(computer_board.guesses, "computerboard guesses" )
+    print("#" * 35)
     print("\n Top left corner is row: 0, col: 0\n")
+    print("#" * 35)
     print(f"{player_board.name}'s Board:")
     player_board.print()
-    print("Computer's Board:")
+    print("\nComputer's Board:")
     computer_board.print()
     print(f"\n{computer_board.guesses}")
     x = take_coord("row", size)
@@ -142,12 +168,11 @@ def new_game():
     print("   Welcome to a Battleships Game\n")
     print("-" * 35)
     print("       Enter a Board Size!\n")
-    print(" Minimum Size= 5  Maximum Size= 10 \n")    
-    size = input("Board Size:\n")
+    print(" Minimum Size = 5  Maximum Size = 10 \n")    
+    size = take_size()
     print("-" * 35)
-    print("       Enter Num of Ships!\n")
-    print(" Minimum Num= 4  Maximum Num= 14 \n")
-    num_ships = input("Num of Ships:\n")
+    print("       Enter Num of Ships!\n")    
+    num_ships = take_ships(size)
     print("-" * 35)
     print("        Enter Your Name!\n")
     player_name = input("Your Name:\n")
