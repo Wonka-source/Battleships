@@ -15,7 +15,10 @@ class Board:
         self.type = type
         self.guesses = []
         self.ships = [] 
-    
+
+        if type == "player":
+            self.remaining_computer_guesses = [(x, y) for x in range(size) for y in range(size)]
+            # print(self.remaining_computer_guesses)
     def print(self):
         for row in self.board:
             print(" ".join(row))
