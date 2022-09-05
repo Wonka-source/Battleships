@@ -125,7 +125,8 @@ def take_guess(x, y, board, size):
         y = take_coord("column", size)
     return (x, y)
 
-
+# def computer_guess()
+    
 
 
     
@@ -147,6 +148,10 @@ def play_game(computer_board, player_board, size):
     print(f"\n{computer_board.guesses}")
     x = take_coord("row", size)
     y = take_coord("column", size)
+    comp_guess_x = random_point(size)
+    comp_guess_y = random_point(size)
+    comp_guess_xy = take_guess(comp_guess_x, comp_guess_y, player_board, size)
+    player_board.guess(comp_guess_xy)
     a_valid_guess = take_guess(x, y, computer_board, size)
     computer_board.guess(a_valid_guess)
 
