@@ -1,8 +1,6 @@
 from random import randint
 
 
-scores = {"computer": 0, "player": 0}
-
 class Board:
     """
     Main board class. Sets board size, the number of ships,
@@ -16,13 +14,14 @@ class Board:
         self.name = name
         self.type = type
         self.guesses = []
-        self.ships = [] 
+        self.ships = []
 
         # generates a list of all the coords of the player board
         # this is used for computers remaining turns/guesses
         if type == "player":
-            self.remaining_player_board = [(x, y) for x in range(size) for y in range(size)]
-
+            self.remaining_player_board = [
+                (x, y) for x in range(size) for y in range(size)
+                ]
 
     def print(self):
         """
@@ -30,10 +29,10 @@ class Board:
         """
         for row in self.board:
             print(" ".join(row))
-    
+
     def guess(self, a_valid_guess):
         """
-        Function for adding guesses to the board  
+        Function for adding guesses to the board
         """
         x = a_valid_guess[0]
         y = a_valid_guess[1]
@@ -63,7 +62,7 @@ class Board:
                 num_of_ships_placed += 1
                 if self.type == "player":
                     self.board[battleship_row][battleship_col] = "@"
-            
+
     def check_for_win(self):
         """
         Checks for a winner by checking if all the coordinates of self.ship
@@ -77,7 +76,7 @@ def random_point(size):
     """
     Helper function to return a random integer between 0 and size
     """
-    return randint(0, size -1)
+    return randint(0, size - 1)
 
 
 def invalid_board_size(size):
@@ -99,7 +98,9 @@ def take_size():
     """
     size = input("BOARD SIZE:\n")
     while invalid_board_size(size):
-        size = input("\nYou must enter a number between 5 and 10!\nBOARD SIZE:\n")
+        size = input(
+            "\nYou must enter a number between 5 and 10!\nBOARD SIZE:\n"
+            )
     return int(size)
 
 
@@ -110,7 +111,8 @@ def invalid_ships(ships, min_ships, max_ships):
     is a number and the value is between the variables "min_ships"
     and "max_ships" (inclusive).
     """
-    if ships.isnumeric() and int(ships) >= min_ships and int(ships) <= max_ships:
+    ship = int(ships)
+    if ships.isnumeric() and ship >= min_ships and ship <= max_ships:
         return False
     return True
 
@@ -126,9 +128,13 @@ def take_ships(size):
     """
     min_ships = int(size*size*.2)
     max_ships = int(size*size*.5)
-    ships = input(f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n")
+    ships = input(
+        f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n"
+        )
     while invalid_ships(ships, min_ships, max_ships):
-        ships = input(f"\nYou must enter a number {min_ships} and {max_ships}!\n\nSHIPS:\n")
+        ships = input(
+            f"\nEnter a num between {min_ships} and {max_ships}!\n\nSHIPS:\n"
+            )
     return int(ships)
 
 
@@ -171,7 +177,7 @@ def invalid_guess(x, y, board):
 
 def take_guess(board):
     """
-    When called prompts the player to input their guess which is stored 
+    When called prompts the player to input their guess which is stored
     as an x and a y variable, respectively. Then uses the invalid_guess() to
     check if the guess is invalid (prompts the player "already guessed
     if it is invalid) and re-askes the player to input until it is
@@ -187,10 +193,9 @@ def take_guess(board):
     print(f"\nPLAYER: {x, y} {board.guess((x, y))}!")
     player_score = 0
     if board.guess((x, y)) == "Hit":
-        print("score:", player_score +1)
+        print("score:", player_score + 1)
     else:
         print("score:", player_score)
-
 
 
 def random_computer_guess(board):
@@ -201,14 +206,16 @@ def random_computer_guess(board):
     length. Then uses the pop() to pull it out (so it is then no longer
     remaining within in the the list of choices) and stores the val in a
     "xy" var (the computers guess). Then prints the guess to the players
-    board.  
+    board.
     """
     # https://www.w3schools.com/Python/python_lists_remove.asp
-    x_y = board.remaining_player_board.pop(random_point(len(board.remaining_player_board)))
+    x_y = board.remaining_player_board.pop(
+        random_point(len(board.remaining_player_board))
+        )
     print(f"COMPUTER: {x_y} {board.guess(x_y)}!")
     computer_score = 0
     if board.guess(x_y) == "Hit":
-        print("score:", computer_score +1)
+        print("score:", computer_score + 1)
     else:
         print("score:", computer_score)
     input("\nPress enter to continue:\n")
@@ -222,7 +229,7 @@ def play_game(computer_board, player_board):
     players move) then call's the random_computer_guess (computers
     move).
     """
-    # print(computer_board.guesses, "computerboard guesses" )    
+    # print(computer_board.guesses, "computerboard guesses" )
     print("Top left corner is row: 0, col: 0\n")
     print("#" * 35)
     print(f"{player_board.name}'s Board:")
@@ -237,8 +244,8 @@ def play_game(computer_board, player_board):
     elif (computer_board.check_for_win()):
         print("\n\nPLAYER WINS\n\n")
     else:
-        play_game(computer_board, player_board)   
-    
+        play_game(computer_board, player_board)
+
     # print(computer_board.guesses, "computerboard guesses" )
 
 
@@ -251,22 +258,24 @@ def new_game():
     the play_game().
     """
 
-    print("-" * 35) 
+    print("-" * 35)
     print("   Welcome to a Battleships Game\n")
     print("-" * 35)
     print("       Enter a Board Size!\n")
-    print(" Minimum Size = 5  Maximum Size = 10 \n")    
+    print(" Minimum Size = 5  Maximum Size = 10 \n")
     size = take_size()
     print("-" * 35)
-    print("       Enter Num of Ships!\n")    
+    print("       Enter Num of Ships!\n")
     num_ships = take_ships(size)
     print("-" * 35)
     print("        Enter Your Name!\n")
     player_name = input("Your Name:\n")
     print("#" * 35)
-    print(f"Hello {player_name}!\n")    
-    print(f"Board size:{size}. Numb of Ships:{num_ships}\n")    
-    computer_board = Board(int(size),int(num_ships), "Computer", type="computer")
+    print(f"Hello {player_name}!\n")
+    print(f"Board size:{size}. Numb of Ships:{num_ships}\n")
+    computer_board = Board(
+        int(size), int(num_ships), "Computer", type="computer"
+        )
     player_board = Board(int(size), int(num_ships), player_name, type="player")
 
     computer_board.populate_board()
