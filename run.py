@@ -16,17 +16,25 @@ class Board:
         self.guesses = []
         self.ships = [] 
 
+        # generates a list of all the coords of the player board
+        # this is used for computers remaining turns/guesses
         if type == "player":
-            self.remaining_computer_guesses = [(x, y) for x in range(size) for y in range(size)]
-            print(self.remaining_computer_guesses)
+            self.remaining_player_board = [(x, y) for x in range(size) for y in range(size)]
+            print(self.remaining_player_board)
+
     def print(self):
+        """
+        Function for printing the board
+        """
         for row in self.board:
             print(" ".join(row))
     
     def guess(self, a_valid_guess):
+        """
+        Function for adding guesses to the board         
+        """
         x = a_valid_guess[0]
-        y = a_valid_guess[1]
-        # list.append(a_valid_guess)
+        y = a_valid_guess[1]        
         self.guesses.append((x, y))        
         # print(self.guesses, "guess(self, a_valid_guess):")
         # print("a_valid_guess", x, y)
@@ -69,22 +77,54 @@ def random_point(size):
     return randint(0, size -1)
 
 def invalid_board_size(size):
+    """
+    Takes a string and checks if it is an invalid board size.
+    Returns False if the size is a number between 5 and 10 (inclusive)
+    """
     if size.isnumeric() and int(size) > 4 and int(size) < 11:
         return False
     return True
 
-def invalid_ships(ships, min_ships, max_ships):
-    if ships.isnumeric() and int(ships) >= min_ships and int(ships) <= max_ships:
-        return False
-    return True
 
 def take_size():
-    size = input(f"BOARD SIZE:\n")
+    """
+    Takes the board size from the player and uses the returned
+    value from invalid_board_size() to determine if its within
+    the range and prompts the player until it is.
+    Returns the value as an int.
+    """
+    size = input("BOARD SIZE:\n")
     while invalid_board_size(size):
         size = input("\nYou must enter a number between 5 and 10!\nBOARD SIZE:\n")
     return int(size)
 
+
+def invalid_ships(ships, min_ships, max_ships):
+    """
+    Takes a string and checks if it is an invalid number of ships
+    returns False (which is = to a Valid num of ships) if the string
+    is a number and the value is between the variables "min_ships"
+    and "max_ships" (inclusive).
+    """
+    
+    
+    if ships.isnumeric() and int(ships) >= min_ships and int(ships) <= max_ships:
+        return False
+    return True
+
+
+
 def take_ships(size):
+    """
+    Using the board size, this calculates the values for "min_ships" and
+    "max_ships". Prompts the user to input a number between the min and
+    max ships. Then using a while loop, it runs all the values through the
+    invalid_ships(). While this function returns True (ships are invalid)
+    the player is prompt to input the value again.
+    Returns ships as an int.
+    """
+
+
     min_ships = int(size*size*.2)
     max_ships = int(size*size*.5)
     ships = input(f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n")
@@ -92,26 +132,53 @@ def take_ships(size):
         ships = input(f"\nYou must enter a number {min_ships} and {max_ships}!\n\nSHIPS:\n")
     return int(ships)
 
+def invalid_coord(coord, size):
+    """
+    Takes a string (coord) and checks if it is a number and within range
+    of the board size. Returns False if it is valid and True if it is
+    invalid.   
+    """
+    if coord.isnumeric() and int(coord) > -1 and int(coord) < size:
+        return False
+    return True
+
+
 
 def take_coord(row_column, size):
+    """
+    Takes the x or the y coord from the player. Then uses the invalid_coord()
+    to check if it is a valid coordinates (ie a num and within the range of the
+    board size). If it is not valid the player will be prompt to input again.
+    Returns the coord as an int.
+
+    """
     coord = input(f"\nGuess a {row_column}:")
     while invalid_coord(coord, size):
         print(f"Values must be between 0 and {size - 1}")
         coord = input(f"Please enter a {row_column}:\n")
     return int(coord)
 
-def invalid_coord(coord, size):
-    if coord.isnumeric() and int(coord) > -1 and int(coord) < size:
-        return False
-    return True
+
 
 
 def invalid_guess(x, y, board):
+    """ 
+    Takes an x and a y (coord) and checks if it has already been
+    guessed (if it is already present in the board.guesses class
+    attribute of the given board (argument)).
+    """
     if (x, y) in board.guesses:
         return True
     return False
 
 def take_guess(board):
+    """
+    When called prompts the player to input their guess which is stored 
+    as an x and a y variable, respectively. Then uses the invalid_guess() to
+    check if the guess is invalid (prompts the player "already guessed
+    if it is invalid) and re-askes the player to input until it is
+    valid. Then Prints the valid guess to the board.
+    """
     x = take_coord("row", board.size)
     y = take_coord("column", board.size)
     while invalid_guess(int(x), int(y), board):
@@ -121,11 +188,27 @@ def take_guess(board):
     print(board.guess((x, y)))
 
 def random_computer_guess(board):
-    xy = board.remaining_computer_guesses.pop(random_point(len(board.remaining_computer_guesses)))
+    """
+    Used to generate a random guess for the computer. Takes "player board"
+    and uses "remaining_player_board" class attribute (witch is a list of
+    tuples [all possible coordinates]) and picks a random point along its
+    length. Then uses the pop() to pull it out (so it is then no longer
+    remaining within in the the list of choices) and stores the val in a
+    "xy" var (the computers guess). Then prints the guess to the players
+    board.
+    
+    """
+    xy = board.remaining_player_board.pop(random_point(len(board.remaining_player_board)))
     print(board.guess(xy))
 
 
-def play_game(computer_board, player_board, size):
+def play_game(computer_board, player_board):
+    """
+    Runs the game. Takes the computer board and player board and prints 
+    them to the terminal. call's the take_guess() (prompts for the 
+    players move) then call's the random_computer_guess (computers
+    move).
+    """
     # print(computer_board.guesses, "computerboard guesses" )
     print("#" * 35)
     print("\n Top left corner is row: 0, col: 0\n")
@@ -137,8 +220,8 @@ def play_game(computer_board, player_board, size):
     print(f"\n{player_board.guesses}")
     take_guess(computer_board)
     random_computer_guess(player_board)
-    print(player_board.remaining_computer_guesses)
-    play_game(computer_board, player_board, size)
+    # print(player_board.remaining_computer_guesses)
+    play_game(computer_board, player_board)
     # print(computer_board.guesses, "computerboard guesses" )
 
 
@@ -146,7 +229,11 @@ def play_game(computer_board, player_board, size):
 
 def new_game():
     """
-    Starts a new game. Sets the size of the board and the number of ships.
+    Starts a new game. Runs take_size() to get the size of the board
+    then runs take_ships() to get the number of ships. Creates two
+    class instances "computer_board" and "player_board" and then runs
+    the populate_board() for the both of them. Then runs them through
+    the play_game().
     """
 
     print("-" * 35) 
@@ -172,7 +259,8 @@ def new_game():
     computer_board.populate_board()
     player_board.populate_board()
 
-    play_game(computer_board, player_board, int(size))
+    play_game(computer_board, player_board)
     
     
+
 new_game()
