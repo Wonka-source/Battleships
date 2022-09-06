@@ -1,6 +1,8 @@
 from random import randint
 
 
+scores = {"computer": 0, "player": 0}
+
 class Board:
     """
     Main board class. Sets board size, the number of ships,
@@ -20,7 +22,7 @@ class Board:
         # this is used for computers remaining turns/guesses
         if type == "player":
             self.remaining_player_board = [(x, y) for x in range(size) for y in range(size)]
-            # print(self.remaining_player_board)
+
 
     def print(self):
         """
@@ -31,14 +33,14 @@ class Board:
     
     def guess(self, a_valid_guess):
         """
-        Function for adding guesses to the board         
+        Function for adding guesses to the board  
         """
         x = a_valid_guess[0]
-        y = a_valid_guess[1]        
-        self.guesses.append((x, y))        
-        # print(self.guesses, "guess(self, a_valid_guess):")
-        # print("a_valid_guess", x, y)
-        if(x, y) in self.ships:
+        y = a_valid_guess[1]
+
+        self.guesses.append((x, y))
+
+        if (x, y) in self.ships:
             self.board[x][y] = "*"
             return "Hit"
         else:
@@ -63,7 +65,7 @@ class Board:
                     self.board[battleship_row][battleship_col] = "@"
             
     def check_for_win(self):
-        """ 
+        """
         Checks for a winner by checking if all the coordinates of self.ship
         list are in self.guesses list.
         https://thispointer.com/python-check-if-a-list-contains-all-the-elements-of-another-list/
@@ -107,7 +109,7 @@ def invalid_ships(ships, min_ships, max_ships):
     returns False (which is = to a Valid num of ships) if the string
     is a number and the value is between the variables "min_ships"
     and "max_ships" (inclusive).
-    """    
+    """
     if ships.isnumeric() and int(ships) >= min_ships and int(ships) <= max_ships:
         return False
     return True
@@ -134,7 +136,7 @@ def invalid_coord(coord, size):
     """
     Takes a string (coord) and checks if it is a number and within range
     of the board size. Returns False if it is valid and True if it is
-    invalid.   
+    invalid.
     """
     if coord.isnumeric() and int(coord) > -1 and int(coord) < size:
         return False
@@ -149,7 +151,7 @@ def take_coord(row_column, size):
     Returns the coord as an int.
 
     """
-    coord = input(f"\nGuess a {row_column}:")
+    coord = input(f"Guess a {row_column}:\n")
     while invalid_coord(coord, size):
         print(f"Values must be between 0 and {size - 1}")
         coord = input(f"Please enter a {row_column}:\n")
@@ -157,7 +159,7 @@ def take_coord(row_column, size):
 
 
 def invalid_guess(x, y, board):
-    """ 
+    """
     Takes an x and a y (coord) and checks if it has already been
     guessed (if it is already present in the board.guesses class
     attribute of the given board (argument)).
@@ -182,7 +184,13 @@ def take_guess(board):
         x = take_coord("row", board.size)
         y = take_coord("column", board.size)
     print("#" * 35)
-    print(f"\nThe PLAYER: {board.guess((x, y))}!")
+    print(f"\nPLAYER: {x, y} {board.guess((x, y))}!")
+    player_score = 0
+    if board.guess((x, y)) == "Hit":
+        print("score:", player_score +1)
+    else:
+        print("score:", player_score)
+
 
 
 def random_computer_guess(board):
@@ -193,12 +201,18 @@ def random_computer_guess(board):
     length. Then uses the pop() to pull it out (so it is then no longer
     remaining within in the the list of choices) and stores the val in a
     "xy" var (the computers guess). Then prints the guess to the players
-    board.    
+    board.  
     """
-
     # https://www.w3schools.com/Python/python_lists_remove.asp
     x_y = board.remaining_player_board.pop(random_point(len(board.remaining_player_board)))
-    print(f"The COMPUTER: {board.guess(x_y)}!\n")
+    print(f"COMPUTER: {x_y} {board.guess(x_y)}!")
+    computer_score = 0
+    if board.guess(x_y) == "Hit":
+        print("score:", computer_score +1)
+    else:
+        print("score:", computer_score)
+    input("\nPress enter to continue:\n")
+    print("-" * 35)
 
 
 def play_game(computer_board, player_board):
@@ -215,7 +229,7 @@ def play_game(computer_board, player_board):
     player_board.print()
     print("\nComputer's Board:")
     computer_board.print()
-    print(f"\n{player_board.guesses}")
+    print(f"{computer_board.guesses}")
     take_guess(computer_board)
     random_computer_guess(player_board)
     if (player_board.check_for_win()):
@@ -223,10 +237,7 @@ def play_game(computer_board, player_board):
     elif (computer_board.check_for_win()):
         print("\n\nPLAYER WINS\n\n")
     else:
-        play_game(computer_board, player_board)
-
-
-    # print(player_board.remaining_computer_guesses)
+        play_game(computer_board, player_board)   
     
     # print(computer_board.guesses, "computerboard guesses" )
 
