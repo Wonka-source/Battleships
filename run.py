@@ -20,7 +20,7 @@ class Board:
         # this is used for computers remaining turns/guesses
         if type == "player":
             self.remaining_player_board = [(x, y) for x in range(size) for y in range(size)]
-            print(self.remaining_player_board)
+            # print(self.remaining_player_board)
 
     def print(self):
         """
@@ -39,7 +39,7 @@ class Board:
         # print(self.guesses, "guess(self, a_valid_guess):")
         # print("a_valid_guess", x, y)
         if(x, y) in self.ships:
-            self.board[x][y]= "*"
+            self.board[x][y] = "*"
             return "Hit"
         else:
             self.board[x][y] = "X"
@@ -62,12 +62,13 @@ class Board:
                 if self.type == "player":
                     self.board[battleship_row][battleship_col] = "@"
             
-            # print("num of ships", num_of_ships_placed)
-            # print("board num of ships", self.num_ships)
-            # print("battle row ", battleship_row)
-            # print("battle col", battleship_col)
-            # print("board ships", self.ships)
-            # print("#" * 25)
+    def check_for_win(self):
+        """ 
+        Checks for a winner by checking if all the coordinates of self.ship
+        list are in self.guesses list.
+        https://thispointer.com/python-check-if-a-list-contains-all-the-elements-of-another-list/
+        """
+        return all(elm in self.guesses for elm in self.ships)
 
 
 def random_point(size):
@@ -75,6 +76,7 @@ def random_point(size):
     Helper function to return a random integer between 0 and size
     """
     return randint(0, size -1)
+
 
 def invalid_board_size(size):
     """
@@ -105,13 +107,10 @@ def invalid_ships(ships, min_ships, max_ships):
     returns False (which is = to a Valid num of ships) if the string
     is a number and the value is between the variables "min_ships"
     and "max_ships" (inclusive).
-    """
-    
-    
+    """    
     if ships.isnumeric() and int(ships) >= min_ships and int(ships) <= max_ships:
         return False
     return True
-
 
 
 def take_ships(size):
@@ -123,14 +122,13 @@ def take_ships(size):
     the player is prompt to input the value again.
     Returns ships as an int.
     """
-
-
     min_ships = int(size*size*.2)
     max_ships = int(size*size*.5)
     ships = input(f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n")
     while invalid_ships(ships, min_ships, max_ships):
         ships = input(f"\nYou must enter a number {min_ships} and {max_ships}!\n\nSHIPS:\n")
     return int(ships)
+
 
 def invalid_coord(coord, size):
     """
@@ -141,7 +139,6 @@ def invalid_coord(coord, size):
     if coord.isnumeric() and int(coord) > -1 and int(coord) < size:
         return False
     return True
-
 
 
 def take_coord(row_column, size):
@@ -159,8 +156,6 @@ def take_coord(row_column, size):
     return int(coord)
 
 
-
-
 def invalid_guess(x, y, board):
     """ 
     Takes an x and a y (coord) and checks if it has already been
@@ -170,6 +165,7 @@ def invalid_guess(x, y, board):
     if (x, y) in board.guesses:
         return True
     return False
+
 
 def take_guess(board):
     """
@@ -185,7 +181,9 @@ def take_guess(board):
         print("ALREADY GUESSED!")
         x = take_coord("row", board.size)
         y = take_coord("column", board.size)
-    print(board.guess((x, y)))
+    print("#" * 35)
+    print(f"\nThe PLAYER: {board.guess((x, y))}!")
+
 
 def random_computer_guess(board):
     """
@@ -195,23 +193,23 @@ def random_computer_guess(board):
     length. Then uses the pop() to pull it out (so it is then no longer
     remaining within in the the list of choices) and stores the val in a
     "xy" var (the computers guess). Then prints the guess to the players
-    board.
-    
+    board.    
     """
-    xy = board.remaining_player_board.pop(random_point(len(board.remaining_player_board)))
-    print(board.guess(xy))
+
+    # https://www.w3schools.com/Python/python_lists_remove.asp
+    x_y = board.remaining_player_board.pop(random_point(len(board.remaining_player_board)))
+    print(f"The COMPUTER: {board.guess(x_y)}!\n")
 
 
 def play_game(computer_board, player_board):
     """
-    Runs the game. Takes the computer board and player board and prints 
-    them to the terminal. call's the take_guess() (prompts for the 
+    Runs the game. Takes the computer board and player board and prints
+    them to the terminal. call's the take_guess() (prompts for the
     players move) then call's the random_computer_guess (computers
     move).
     """
-    # print(computer_board.guesses, "computerboard guesses" )
-    print("#" * 35)
-    print("\n Top left corner is row: 0, col: 0\n")
+    # print(computer_board.guesses, "computerboard guesses" )    
+    print("Top left corner is row: 0, col: 0\n")
     print("#" * 35)
     print(f"{player_board.name}'s Board:")
     player_board.print()
@@ -220,11 +218,17 @@ def play_game(computer_board, player_board):
     print(f"\n{player_board.guesses}")
     take_guess(computer_board)
     random_computer_guess(player_board)
+    if (player_board.check_for_win()):
+        print("\n\nCOMPUTER WINS\n\n")
+    elif (computer_board.check_for_win()):
+        print("\n\nPLAYER WINS\n\n")
+    else:
+        play_game(computer_board, player_board)
+
+
     # print(player_board.remaining_computer_guesses)
-    play_game(computer_board, player_board)
+    
     # print(computer_board.guesses, "computerboard guesses" )
-
-
 
 
 def new_game():
@@ -248,11 +252,9 @@ def new_game():
     print("-" * 35)
     print("        Enter Your Name!\n")
     player_name = input("Your Name:\n")
-    print("-" * 35)
-    print(f" Hello {player_name}!\n")    
-    print(f" Board size:{size}. Numb of Ships:{num_ships}\n")    
-    print(" Top left corner is row: 0, col: 0")
-    print("-" * 35) 
+    print("#" * 35)
+    print(f"Hello {player_name}!\n")    
+    print(f"Board size:{size}. Numb of Ships:{num_ships}\n")    
     computer_board = Board(int(size),int(num_ships), "Computer", type="computer")
     player_board = Board(int(size), int(num_ships), player_name, type="player")
 
@@ -260,7 +262,6 @@ def new_game():
     player_board.populate_board()
 
     play_game(computer_board, player_board)
-    
-    
+
 
 new_game()
