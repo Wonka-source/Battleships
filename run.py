@@ -6,7 +6,7 @@ def valid_board_size(size):
     Takes a string and checks if it is an invalid board size.
     Returns False if the size is a number between 5 and 10 (inclusive)
     """
-    return (size > 4 and size < 11)
+    return (size > 3 and size < 8)
 
 
 def take_size():
@@ -20,10 +20,10 @@ def take_size():
         try:
             size = int(input("BOARD SIZE:\n").strip())
             if not valid_board_size(size):
-                raise ValueError("Number must be between 5 and 10.")
+                raise ValueError("Number must be between 4 and 7.")
 
         except ValueError:
-            print("Please enter a number between 5 and 10.")
+            print("Please enter a number between 4 and 7.")
             continue
 
         return size
@@ -73,7 +73,7 @@ def play_game(computer_board, player_board, player_score, computer_score):
     players move) then call's the random_computer_guess (computers
     move).
     """
-    print("Top left corner is row: 0, col: 0\n")
+    print("Top left corner is row: 0, col: 0")
     print("#" * 35)
     print(f"{player_board.name}'s Board:")
     player_board.print()
@@ -105,7 +105,7 @@ def new_game():
     print("   Welcome to a Battleships Game\n")
     print("-" * 35)
     print("       Enter a Board Size!\n")
-    print(" Minimum Size = 5  Maximum Size = 10 \n")
+    print(" Minimum Size = 4  Maximum Size = 7 \n")
     size = take_size()
     print("-" * 35)
     print("       Enter Num of Ships!\n")
@@ -114,7 +114,6 @@ def new_game():
     print("        Enter Your Name!\n")
     player_name = input("Your Name:\n").strip()
     print("#" * 35)
-    print(f"Hello {player_name}!\n")
     print(f"Board size:{size}. Numb of Ships:{num_ships}\n")
     computer_board = Board(
         int(size), int(num_ships), "Computer", type="computer"

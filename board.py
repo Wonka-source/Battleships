@@ -81,11 +81,7 @@ class Board:
 
     def take_guess(self, player_score):
         """
-        When called prompts the player to input their guess which is stored
-        as an x and a y variable, respectively. Then uses the invalid_guess()
-        to check if the guess is invalid (prompts the player "already guessed
-        if it is invalid) and re-askes the player to input until it is
-        valid. Then Prints the valid guess to the board.
+        
         """
         while True:
             try:
@@ -142,10 +138,10 @@ def valid_coord(coord, size):
 
 def take_coord(row_column, size):
     """
-    Takes the x or the y coord from the player. Then uses the invalid_coord()
-    to check if it is a valid coordinates (ie a num and within the range of the
-    board size). If it is not valid the player will be prompt to input again.
-    Returns the coord as an int.
+    Takes the x or the y coord from the player. Then uses the valid_coord()
+    to check if it is a valid coordinates (a num and within the range of the
+    board size). If it is not valid will rase a value error until a valid
+    coord is entered.
 
     """
     while True:
