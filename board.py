@@ -74,14 +74,17 @@ class Board:
     def valid_guess(self, x, y):
         """
         Takes an x and a y (coord) and checks if it has already been
-        guessed (if it is already present in the board.guesses class
-        attribute of the given board (argument)).
+        guessed (if it is listed among the board.guesses of the given
+        board class).
         """
         return ((x, y) not in self.guesses)
 
     def take_guess(self, player_score):
         """
-        
+        Prompts the player for an x and a y coord. Then uses the valid_guess()
+        to check if it is a valid coordinates (one that has not already been
+        guessed). If it is not valid it will rase a value error until a
+        valid coord is entered.
         """
         while True:
             try:
@@ -130,7 +133,7 @@ class Board:
 def valid_coord(coord, size):
     """
     Takes a string (coord) and checks if it is a number and within range
-    of the board size. Returns False if it is valid and True if it is
+    of the board size. Returns True if it is valid and False if it is
     invalid.
     """
     return (coord > -1 and coord < size)

@@ -3,18 +3,17 @@ from board import Board
 
 def valid_board_size(size):
     """
-    Takes a string and checks if it is an invalid board size.
-    Returns False if the size is a number between 5 and 10 (inclusive)
+    Takes a string and checks if it is a valid board size.
+    Returns True if the size is a number between 4 and 7 (inclusive).
     """
     return (size > 3 and size < 8)
 
 
 def take_size():
     """
-    Takes the board size from the player and uses the returned
-    value from invalid_board_size() to determine if its within
-    the range and prompts the player until it is.
-    Returns the value as an int.
+    Takes the board size from the player uses valid_board_size()
+    to determine if it is valid. Raises a ValueError if it is
+    invalid and prompts the player until it is.
     """
     while True:
         try:
@@ -31,22 +30,19 @@ def take_size():
 
 def valid_ships(ships, min_ships, max_ships):
     """
-    Takes a string and checks if it is an invalid number of ships
-    returns False (which is = to a Valid num of ships) if the string
-    is a number and the value is between the variables "min_ships"
-    and "max_ships" (inclusive).
+    Takes a string and checks if it is a valid number of ships
+    returns True if Valid.
     """
     return (ships >= min_ships and ships <= max_ships)
 
 
 def take_ships(size):
     """
-    Using the board size, this calculates the values for "min_ships" and
+    Using the board size, calculates the values for "min_ships" and
     "max_ships". Prompts the user to input a number between the min and
     max ships. Then using a while loop, it runs all the values through the
-    invalid_ships(). While this function returns True (ships are invalid)
-    the player is prompt to input the value again.
-    Returns ships as an int.
+    valid_ships() to validate. Raises a ValueError if the input is not
+    valid.
     """
     min_ships = int(size*size*.2)
     max_ships = int(size*size*.5)
