@@ -1,5 +1,6 @@
 from random import randint
 
+
 class Board:
     """
     Main board class. Sets board size, the number of ships,
@@ -105,6 +106,7 @@ def take_size():
 
         return size
 
+
 def valid_ships(ships, min_ships, max_ships):
     """
     Takes a string and checks if it is an invalid number of ships
@@ -129,10 +131,12 @@ def take_ships(size):
     while True:
         try:
             ships = int(input(
-                f"\nEnter a number between {min_ships} and {max_ships}!\n\nSHIPS:\n"
+                f"\nEnter a numb between {min_ships}-{max_ships}!\n\nSHIPS:\n"
                 ).strip())
             if not valid_ships(ships, min_ships, max_ships):
-                raise ValueError(f"Number must be between {min_ships} and {max_ships}.")
+                raise ValueError(
+                    f"Number must be between {min_ships} and {max_ships}."
+                    )
 
         except ValueError:
             continue
@@ -227,6 +231,7 @@ def random_computer_guess(board, computer_score):
     print("-" * 35)
     return computer_score
 
+
 def play_game(computer_board, player_board, player_score, computer_score):
     """
     Runs the game. Takes the computer board and player board and prints
@@ -250,6 +255,7 @@ def play_game(computer_board, player_board, player_score, computer_score):
         new_game()
     else:
         play_game(computer_board, player_board, player_score, computer_score)
+
 
 def new_game():
     """
