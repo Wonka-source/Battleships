@@ -19,7 +19,7 @@ class Board:
         # generates a list of all the coords of the player board
         # this is used for computers remaining turns/guesses
         if type == "player":
-            self.remaining_player_board = [
+            self.remaining_board = [
                 (x, y) for x in range(size) for y in range(size)
                 ]
 
@@ -109,7 +109,7 @@ class Board:
     def random_computer_guess(self, computer_score):
         """
         Used to generate a random guess for the computer. Takes "player board"
-        and uses "remaining_player_board" class attribute (witch is a list of
+        and uses "remaining_board" class attribute (witch is a list of
         tuples [all possible coordinates]) and picks a random point along its
         length. Then uses the pop() to pull it out (so it is then no longer
         remaining within in the the list of choices) and stores the val in a
@@ -117,8 +117,8 @@ class Board:
         board.
         """
         # https://www.w3schools.com/Python/python_lists_remove.asp
-        x_y = self.remaining_player_board.pop(
-            random_point(len(self.remaining_player_board))
+        x_y = self.remaining_board.pop(
+            random_point(len(self.remaining_board))
             )
         hit_miss = self.guess(x_y)
         print(f"\nCOMPUTER: {x_y[0], x_y[1]} {hit_miss}!")
