@@ -79,14 +79,12 @@ def random_point(size):
     return randint(0, size - 1)
 
 
-def invalid_board_size(size):
+def valid_board_size(size):
     """
     Takes a string and checks if it is an invalid board size.
     Returns False if the size is a number between 5 and 10 (inclusive)
     """
-    if size.isnumeric() and int(size) > 4 and int(size) < 11:
-        return False
-    return True
+    return (size > 4 and size < 11)
 
 
 def take_size():
@@ -96,25 +94,26 @@ def take_size():
     the range and prompts the player until it is.
     Returns the value as an int.
     """
-    size = input("BOARD SIZE:\n")
-    while invalid_board_size(size):
-        size = input(
-            "\nYou must enter a number between 5 and 10!\nBOARD SIZE:\n"
-            )
-    return int(size)
+    while True:
+        try:
+            size = int(input("BOARD SIZE:\n").strip())
+            if not valid_board_size(size):
+                raise ValueError("Number must be between 5 and 10.")
 
+        except ValueError:
+            print("Please enter a number between 5 and 10.")
+            continue
 
-def invalid_ships(ships, min_ships, max_ships):
+        return size
+
+def valid_ships(ships, min_ships, max_ships):
     """
     Takes a string and checks if it is an invalid number of ships
     returns False (which is = to a Valid num of ships) if the string
     is a number and the value is between the variables "min_ships"
     and "max_ships" (inclusive).
     """
-    ship = int(ships)
-    if ships.isnumeric() and ship >= min_ships and ship <= max_ships:
-        return False
-    return True
+    return (ships >= min_ships and ships <= max_ships)
 
 
 def take_ships(size):
@@ -128,25 +127,27 @@ def take_ships(size):
     """
     min_ships = int(size*size*.2)
     max_ships = int(size*size*.5)
-    ships = input(
-        f"Minimum Ships = {min_ships} Maximum Ships = {max_ships}\n\nSHIPS:\n"
-        )
-    while invalid_ships(ships, min_ships, max_ships):
-        ships = input(
-            f"\nEnter a num between {min_ships} and {max_ships}!\n\nSHIPS:\n"
-            )
-    return int(ships)
+    while True:
+        try:
+            ships = int(input(
+                f"\nEnter a number between {min_ships} and {max_ships}!\n\nSHIPS:\n"
+                ).strip())
+            if not valid_ships(ships, min_ships, max_ships):
+                raise ValueError(f"Number must be between {min_ships} and {max_ships}.")
+
+        except ValueError:
+            continue
+
+        return ships
 
 
-def invalid_coord(coord, size):
+def valid_coord(coord, size):
     """
     Takes a string (coord) and checks if it is a number and within range
     of the board size. Returns False if it is valid and True if it is
     invalid.
     """
-    if coord.isnumeric() and int(coord) > -1 and int(coord) < size:
-        return False
-    return True
+    return (coord > -1 and coord < size)
 
 
 def take_coord(row_column, size):
@@ -157,11 +158,17 @@ def take_coord(row_column, size):
     Returns the coord as an int.
 
     """
-    coord = input(f"Guess a {row_column}:\n")
-    while invalid_coord(coord, size):
-        print(f"Values must be between 0 and {size - 1}")
-        coord = input(f"Please enter a {row_column}:\n")
-    return int(coord)
+    while True:
+        try:
+            coord = int(input(f"Guess a {row_column}:\n").strip())
+            if not valid_coord(coord, size):
+                raise ValueError(f"Values must be between 0 and {size - 1}")
+
+        except ValueError:
+            print(f"Values must be between 0 and {size - 1}")
+            continue
+
+        return coord
 
 
 def invalid_guess(x, y, board):
@@ -183,6 +190,7 @@ def take_guess(board):
     if it is invalid) and re-askes the player to input until it is
     valid. Then Prints the valid guess to the board.
     """
+    global player_score
     x = take_coord("row", board.size)
     y = take_coord("column", board.size)
     while invalid_guess(int(x), int(y), board):
@@ -190,12 +198,11 @@ def take_guess(board):
         x = take_coord("row", board.size)
         y = take_coord("column", board.size)
     print("#" * 35)
-    print(f"\nPLAYER: {x, y} {board.guess((x, y))}!")
-    player_score = 0
-    if board.guess((x, y)) == "Hit":
-        print("score:", player_score + 1)
-    else:
-        print("score:", player_score)
+    hit_miss = board.guess((x, y))
+    print(f"\nPLAYER: {x, y} {hit_miss}!")
+    if hit_miss == "Hit":
+        player_score += 1
+    print("score:", player_score)
 
 
 def random_computer_guess(board):
@@ -208,16 +215,16 @@ def random_computer_guess(board):
     "xy" var (the computers guess). Then prints the guess to the players
     board.
     """
+    global computer_score
     # https://www.w3schools.com/Python/python_lists_remove.asp
     x_y = board.remaining_player_board.pop(
         random_point(len(board.remaining_player_board))
         )
-    print(f"COMPUTER: {x_y} {board.guess(x_y)}!")
-    computer_score = 0
-    if board.guess(x_y) == "Hit":
-        print("score:", computer_score + 1)
-    else:
-        print("score:", computer_score)
+    hit_miss = board.guess(x_y)
+    print(f"\nCOMPUTER: {x_y[0], x_y[1]} {hit_miss}!")
+    if hit_miss == "Hit":
+        computer_score += 1
+    print("score:", computer_score)
     input("\nPress enter to continue:\n")
     print("-" * 35)
 
@@ -229,14 +236,12 @@ def play_game(computer_board, player_board):
     players move) then call's the random_computer_guess (computers
     move).
     """
-    # print(computer_board.guesses, "computerboard guesses" )
     print("Top left corner is row: 0, col: 0\n")
     print("#" * 35)
     print(f"{player_board.name}'s Board:")
     player_board.print()
     print("\nComputer's Board:")
     computer_board.print()
-    print(f"{computer_board.guesses}")
     take_guess(computer_board)
     random_computer_guess(player_board)
     if (player_board.check_for_win()):
@@ -246,7 +251,6 @@ def play_game(computer_board, player_board):
     else:
         play_game(computer_board, player_board)
 
-    # print(computer_board.guesses, "computerboard guesses" )
 
 
 def new_game():
@@ -257,7 +261,11 @@ def new_game():
     the populate_board() for the both of them. Then runs them through
     the play_game().
     """
-
+    # https://www.w3schools.com/python/python_variables_global.asp
+    global player_score
+    global computer_score
+    player_score = 0
+    computer_score = 0
     print("-" * 35)
     print("   Welcome to a Battleships Game\n")
     print("-" * 35)
@@ -269,7 +277,7 @@ def new_game():
     num_ships = take_ships(size)
     print("-" * 35)
     print("        Enter Your Name!\n")
-    player_name = input("Your Name:\n")
+    player_name = input("Your Name:\n").strip()
     print("#" * 35)
     print(f"Hello {player_name}!\n")
     print(f"Board size:{size}. Numb of Ships:{num_ships}\n")
