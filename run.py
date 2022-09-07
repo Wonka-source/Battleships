@@ -1,6 +1,5 @@
 from random import randint
 
-
 class Board:
     """
     Main board class. Sets board size, the number of ships,
@@ -182,7 +181,7 @@ def invalid_guess(x, y, board):
     return False
 
 
-def take_guess(board):
+def take_guess(board, player_score):
     """
     When called prompts the player to input their guess which is stored
     as an x and a y variable, respectively. Then uses the invalid_guess() to
@@ -190,7 +189,6 @@ def take_guess(board):
     if it is invalid) and re-askes the player to input until it is
     valid. Then Prints the valid guess to the board.
     """
-    global player_score
     x = take_coord("row", board.size)
     y = take_coord("column", board.size)
     while invalid_guess(int(x), int(y), board):
@@ -203,9 +201,10 @@ def take_guess(board):
     if hit_miss == "Hit":
         player_score += 1
     print("score:", player_score)
+    return player_score
 
 
-def random_computer_guess(board):
+def random_computer_guess(board, computer_score):
     """
     Used to generate a random guess for the computer. Takes "player board"
     and uses "remaining_player_board" class attribute (witch is a list of
@@ -215,7 +214,6 @@ def random_computer_guess(board):
     "xy" var (the computers guess). Then prints the guess to the players
     board.
     """
-    global computer_score
     # https://www.w3schools.com/Python/python_lists_remove.asp
     x_y = board.remaining_player_board.pop(
         random_point(len(board.remaining_player_board))
@@ -227,9 +225,9 @@ def random_computer_guess(board):
     print("score:", computer_score)
     input("\nPress enter to continue:\n")
     print("-" * 35)
+    return computer_score
 
-
-def play_game(computer_board, player_board):
+def play_game(computer_board, player_board, player_score, computer_score):
     """
     Runs the game. Takes the computer board and player board and prints
     them to the terminal. call's the take_guess() (prompts for the
@@ -242,16 +240,16 @@ def play_game(computer_board, player_board):
     player_board.print()
     print("\nComputer's Board:")
     computer_board.print()
-    take_guess(computer_board)
-    random_computer_guess(player_board)
+    player_score = take_guess(computer_board, player_score)
+    computer_score = random_computer_guess(player_board, computer_score)
     if (player_board.check_for_win()):
         print("\n\nCOMPUTER WINS\n\n")
+        new_game()
     elif (computer_board.check_for_win()):
         print("\n\nPLAYER WINS\n\n")
+        new_game()
     else:
-        play_game(computer_board, player_board)
-
-
+        play_game(computer_board, player_board, player_score, computer_score)
 
 def new_game():
     """
@@ -261,9 +259,6 @@ def new_game():
     the populate_board() for the both of them. Then runs them through
     the play_game().
     """
-    # https://www.w3schools.com/python/python_variables_global.asp
-    global player_score
-    global computer_score
     player_score = 0
     computer_score = 0
     print("-" * 35)
@@ -289,7 +284,7 @@ def new_game():
     computer_board.populate_board()
     player_board.populate_board()
 
-    play_game(computer_board, player_board)
+    play_game(computer_board, player_board, player_score, computer_score)
 
 
 new_game()
