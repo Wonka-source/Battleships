@@ -59,6 +59,7 @@ def take_ships(size):
                 raise ValueError(
                     f"Number must be between {min_ships} and {max_ships}."
                     )
+
         except ValueError:
             continue
 
@@ -126,4 +127,5 @@ def new_game():
     play_game(computer_board, player_board, player_score, computer_score)
 
 
-new_game()
+if __name__ == "__main__":
+    new_game()

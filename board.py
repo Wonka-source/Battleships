@@ -71,15 +71,13 @@ class Board:
         """
         return all(elm in self.guesses for elm in self.ships)
 
-    def invalid_guess(self, x, y):
+    def valid_guess(self, x, y):
         """
         Takes an x and a y (coord) and checks if it has already been
         guessed (if it is already present in the board.guesses class
         attribute of the given board (argument)).
         """
-        if (x, y) in self.guesses:
-            return True
-        return False
+        return ((x, y) not in self.guesses)
 
     def take_guess(self, player_score):
         """
@@ -89,19 +87,25 @@ class Board:
         if it is invalid) and re-askes the player to input until it is
         valid. Then Prints the valid guess to the board.
         """
-        x = take_coord("row", self.size)
-        y = take_coord("column", self.size)
-        while self.invalid_guess(x, y):
-            print("ALREADY GUESSED!")
-            x = take_coord("row", self.size)
-            y = take_coord("column", self.size)
-        print("#" * 35)
-        hit_miss = self.guess((x, y))
-        print(f"\nPLAYER: {x, y} {hit_miss}!")
-        if hit_miss == "Hit":
-            player_score += 1
-        print("score:", player_score)
-        return player_score
+        while True:
+            try:
+                x = take_coord("row", self.size)
+                y = take_coord("column", self.size)
+                if not self.valid_guess(x, y):
+                    raise ValueError("Must be a new guess.")
+
+            except ValueError:
+                print("ALREADY GUESSED!")
+                continue
+
+            print("#" * 35)
+            hit_miss = self.guess((x, y))
+            print(f"\nPLAYER: {x, y} {hit_miss}!")
+            if hit_miss == "Hit":
+                player_score += 1
+
+            print("score:", player_score)
+            return player_score
 
     def random_computer_guess(self, computer_score):
         """
